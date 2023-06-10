@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+  <title>YouTube Player API</title>
+
+  <script src="https://www.youtube.com/iframe_api"></script>
+
+  <script>
+
+    // YouTubeプレーヤーAPIの準備ができた時に実行されるコールバック関数
+
+    function onYouTubeIframeAPIReady() {
+
+      // 動画を埋め込むプレーヤーを作成
+
+      var player = new YT.Player('player', {
+
+        videoId: 'DAQcUd4hN7A',
+
+        events: {
+
+          onReady: onPlayerReady
+
+        }
+
+      });
+
+    }
+
+    // プレーヤーが準備完了した時に実行されるコールバック関数
+
+    function onPlayerReady(event) {
+
+      // プレーヤーを自動再生
+
+      event.target.playVideo();
+
+    }
+
+  </script>
+
+</head>
+
+<body>
+
+  <!-- プレーヤーが表示される要素 -->
+
+  <div id="player"></div>
+
+</body>
+
+</html>
