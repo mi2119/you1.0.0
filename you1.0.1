@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+  <style>
+
+    body {
+
+      font-family: Arial, sans-serif;
+
+      background-color: #f2f2f2;
+
+      margin: 0;
+
+      padding: 10px;
+
+    }
+
+    .container {
+
+      width: 100%;
+
+      background-color: #ffffff;
+
+      padding: 10px;
+
+      border-radius: 5px;
+
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+
+    }
+
+    textarea {
+
+      width: 100%;
+
+      height: 150px;
+
+      margin-top: 10px;
+
+      padding: 10px;
+
+      border: 1px solid #ccc;
+
+      border-radius: 5px;
+
+      resize: none;
+
+    }
+
+    button {
+
+      display: block;
+
+      width: 100%;
+
+      margin-top: 10px;
+
+      padding: 10px 20px;
+
+      background-color: #4CAF50;
+
+      color: #ffffff;
+
+      border: none;
+
+      border-radius: 5px;
+
+      cursor: pointer;
+
+    }
+
+    button:hover {
+
+      background-color: #45a049;
+
+    }
+
+    #idShowArea {
+
+      height: 100px;
+
+    }
+
+    #openLink {
+
+      margin-top: 10px;
+
+    }
+
+    /* スマートフォン向けスタイル */
+
+    @media screen and (max-width: 480px) {
+
+      .container {
+
+        padding: 20px;
+
+      }
+
+      textarea {
+
+        height: 200px;
+
+      }
+
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+  <div class="container">
+
+    <textarea id="urlHolder" placeholder="ここにプレイリストURLを入力してね"></textarea>
+
+    <button id="extractId">プレイリストIDを抽出する</button>
+
+    <textarea id="idShowArea" placeholder="ここに抽出されたプレイリストIDが表示されます"></textarea>
+
+    <button id="openPlayListLink">プレイリストを開く（自動でブックマークレットをコピー）</button>
+
+    <textarea id="idHolder" placeholder="ここに抽出した動画IDを入力してね"></textarea>
+
+    <button id="openY2Link">ダウンロードリンクを大量に開く</button>
+
+  </div>
+
+  <script>
+
+    const urlHolder = document.getElementById('urlHolder');
+
+    const extractId = document.getElementById('extractId');
+
+    extractId.addEventListener('click', () => {
+
+      const text = urlHolder.value; // .innerHTML ではなく .value を使用する
+
+      const regex = /(?<=list=|list%3D)[^&#\n]+/;
+
+      const matchResult = text.match(regex)[0];
+
+      idShowArea.value = matchResult; // .innerHTML ではなく .value を使用する
+
+    });
+
+    const idShowArea = document.getElementById('idShowArea');
+
+    const openPlayListLink = document.getElementById('openPlayListLink');
+
+    openPlayListLink.addEventListener('click', () => {
+
+      navigator.clipboard.writeText('//javascript:(() => {   const regex = /(?<=vi\/)(?!INDIFFERENT|defaultIcon|loggingUrls|websiteText|channelName|toggledText|publishDate|totalVideos|imageMiddle|urlEndpoint|defaultText|toggledIcon|shareButton|webPageType|tabRenderer|visitorData|setVideoIds|tooltipText)[A-Za-z0-9-]{11}(?=\/hqdefault)/g;   const matches = document.body.innerHTML.match(regex);   const uniqueMatches = [...new Set(matches)];   const result = uniqueMatches.join("<br>");   window.prompt("抽出された文字列をコピーしてください:", result); })();');
+
+      navigator.clipboard.writeText('view-source:');
+
+      const matchResult = idShowArea.value; // マッチ結果を取得する
+
+      window.location.href = 'https://www.youtube.com/playlist?app=desktop&list=' + matchResult;
+
+      //window.location.href = 'view-source:' + 'https://www.youtube.com/playlist?app=desktop&list=' + matchResult;
+
+    });
+
+    const idHolder = document.getElementById('idHolder').value;
+
+    const openY2Link = document.getElementById('openY2Link');
+
+    openY2Link.addEventListener('click', () => {
+
+      const urls = idHolder.split('\n').filter(url => url.trim() !== '');
+
+      urls.forEach(url => {
+
+        const fullUrl = `https://www.y2mate.com/youtube/${url}`;
+
+        window.open(fullUrl, '_blank');
+
+      });
+
+    });
+
+  </script>
+
+</body>
+
+</html>
